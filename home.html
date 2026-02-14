@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weapon Detection</title>
+</head>
+
+<body style="background:#020617;color:white;text-align:center;font-family:Arial">
+
+<h1>Smart Weapon Detection System</h1>
+
+<h2>Search Detections by Date</h2>
+
+<div style="margin:20px;padding:20px;border:1px solid white;width:420px;margin:auto;border-radius:10px">
+
+    <input type="date" id="searchDate" style="padding:10px;width:200px">
+    <br><br>
+    <button onclick="searchData()" style="padding:10px 25px;background:#16a34a;color:white;border:none;border-radius:6px">
+        Search
+    </button>
+
+</div>
+
+<br>
+
+<table border="1" align="center" id="searchTable" width="80%" style="border-collapse:collapse">
+<thead style="background:#0f172a">
+<tr>
+<th>Image</th>
+<th>Weapon</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr><td colspan="3">No Data</td></tr>
+</tbody>
+</table>
+
+<br><br>
+
+<a href="/enable">
+    <button style="padding:15px 35px;background:#22c55e;color:white;border:none;border-radius:8px">
+        ENABLE CAMERA
+    </button>
+</a>
+
+<script>
+
+async function searchData(){
+
+    let rawDate = document.getElementById("searchDate").value;
+
+    if(!rawDate){
+        alert("Please select a date");
+        return;
+    }
+
+    // force YYYY-MM-DD format
+    let date = new Date(rawDate);
+    let yyyy = date.getFullYear();
+    let mm = String(date.getMonth()+1).padStart(2,'0');
+    let dd = String(date.getDate()).padStart(2,'0');
+
+    let formatted = `${yyyy}-${mm}-${dd}`;
+
+    console.log("Sending date:", formatted);
+
+    const response = await fetch(`/search?date=${encodeURIComponent(formatted)}`);
+    const data = await response.json();
+
+    let rows="";
+
+    if(data.length === 0){
+        rows = `<tr><td colspan="3">No Records Found</td></tr>`;
+    }
+    else{
+        data.forEach(row=>{
+            rows += `
+            <tr>
+                <td><img src="/static/detected/${row[1]}" width="120"></td>
+                <td>${row[0]}</td>
+                <td>${row[2]}</td>
+            </tr>`;
+        });
+    }
+
+    document.querySelector("#searchTable tbody").innerHTML = rows;
+}
+
+</script>
+
+</body>
+</html>

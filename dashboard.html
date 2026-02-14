@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+</head>
+
+<body style="background:#020617;color:white;text-align:center">
+
+<h2>Live Camera</h2>
+<img src="{{ url_for('video_feed') }}" width="700">
+
+<br><br>
+
+<!-- Buttons -->
+<a href="/">
+<button style="padding:10px 20px;background:#2563eb;color:white;margin-right:10px">
+Home
+</button>
+</a>
+
+<a href="/disable">
+<button style="padding:10px 20px;background:red;color:white">
+Disable Camera
+</button>
+</a>
+
+<h2>Detected Weapons</h2>
+
+<table border="1" align="center" id="detectTable">
+<thead>
+<tr>
+<th>Image</th>
+<th>Weapon</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<script>
+function loadDetections(){
+fetch('/get_detections')
+.then(res=>res.json())
+.then(data=>{
+let table="";
+data.forEach(row=>{
+table+=`
+<tr>
+<td><img src="/static/detected/${row[1]}" width="120"></td>
+<td>${row[0]}</td>
+<td>${row[2]}</td>
+</tr>`;
+});
+document.querySelector("#detectTable tbody").innerHTML=table;
+});
+}
+
+setInterval(loadDetections,1000);
+</script>
+
+</body>
+</html>
+
