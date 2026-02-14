@@ -1,0 +1,19 @@
+##1.packages####
+
+  flask
+  opencv-python
+  torch
+  numpy
+
+####2.sql database#####
+
+  extension->sql lite and sql lite viewer
+
+
+###3.command on init.py####
+  
+    python init_db.py
+
+###DIWILIO
+SID:AC9ed5689263866f7364761fdd460a6b22
+AUTH:4caca4ff930d6251604d1ddc02f96dfd
